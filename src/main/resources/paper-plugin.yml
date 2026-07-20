@@ -1,0 +1,4 @@
+name: Lob-Man
+version: '${version}'
+api-version: '1.21.11'
+main: io.github.sree.LobManPlugin
