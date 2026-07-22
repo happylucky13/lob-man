@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class SafetyNet {
 
         for(Player player: detectedPlayers) {
             player.teleportAsync(centeredLocation);
+            player.setVelocity(new Vector(0, 0, 0));
         }
     }
 
