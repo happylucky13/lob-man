@@ -9,7 +9,9 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,14 @@ public class LobmanPlugin extends JavaPlugin {
         if (lobbyName != null) {
             lobbyWorld = Bukkit.getWorld(lobbyName);
         }
+
+        BukkitScheduler scheduler = getServer().getScheduler();
+
+        scheduler.runTaskTimer(this, task -> {
+            for(SafetyNet safetyNet : safetyNets) {
+                safetyNet.teleportPlayers(safetyNet.detectPlayer(lobbyWorld), lobbyWorld);
+            }
+        }, 0L, 1L);
     }
 
     public static LobmanPlugin getInstance() {
