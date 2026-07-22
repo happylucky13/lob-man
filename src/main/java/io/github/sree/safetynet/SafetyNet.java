@@ -97,6 +97,4 @@ public class SafetyNet {
             player.teleportAsync(centeredLocation);
         }
     }
-
-
 }
