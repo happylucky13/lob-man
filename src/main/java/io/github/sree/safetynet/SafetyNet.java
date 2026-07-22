@@ -10,30 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SafetyNet {
-    private String name;
-    private int yLevel;
-    private ColumnBlockPosition firstPosition;
-    private ColumnBlockPosition secondPosition;
-    private BlockPosition teleportPosition;
+    private final String name;
+    private final int yLevel;
+    private final ColumnBlockPosition firstPosition;
+    private final ColumnBlockPosition secondPosition;
+    private final BlockPosition teleportPosition;
 
-    // Setters
-    public void setName(String name) {
+    private SafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition) {
         this.name = name;
-    }
-
-    public void setYLevel(int yLevel) {
         this.yLevel = yLevel;
-    }
-
-    public void setFirstPosition(ColumnBlockPosition firstPosition) {
         this.firstPosition = firstPosition;
-    }
-
-    public void setSecondPosition(ColumnBlockPosition secondPosition) {
         this.secondPosition = secondPosition;
-    }
-
-    public void setTeleportPosition(BlockPosition teleportPosition) {
         this.teleportPosition = teleportPosition;
     }
 
@@ -96,5 +83,10 @@ public class SafetyNet {
         for(Player player: detectedPlayers) {
             player.teleportAsync(centeredLocation);
         }
+    }
+
+    // Create safety net
+    public static SafetyNet createSafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition) {
+        return new SafetyNet(name, yLevel, firstPosition, secondPosition, teleportPosition);
     }
 }

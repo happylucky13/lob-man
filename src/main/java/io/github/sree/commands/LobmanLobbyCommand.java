@@ -44,7 +44,7 @@ public class LobmanLobbyCommand {
             return 0;
         }
 
-        sender.sendMessage(Component.text("The current Lobby World is " + plugin.getLobbyWorld()));
+        sender.sendMessage(Component.text("The current Lobby World is " + plugin.getLobbyWorld().getName()));
         return Command.SINGLE_SUCCESS;
     }
 }

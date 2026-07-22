@@ -9,8 +9,11 @@ import io.github.sree.LobmanPlugin;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
+import io.papermc.paper.math.BlockPosition;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 
 public class LobmanSafetyNetCommand {
@@ -23,7 +26,7 @@ public class LobmanSafetyNetCommand {
                                         .then(Commands.argument("pos-1", ArgumentTypes.columnBlockPosition())
                                                 .then(Commands.argument("pos-2", ArgumentTypes.columnBlockPosition())
                                                         .then(Commands.argument("tp-location", ArgumentTypes.blockPosition())
-                                                                .executes(LobmanSafetyNetCommand::executeCreateSafetyNet)
+                                                                .executes(LobmanSafetyNetCommand::createSafetyNet)
                                                         )
                                                 )
                                         )
@@ -35,7 +38,13 @@ public class LobmanSafetyNetCommand {
                 );
     }
 
-    private static int executeCreateSafetyNet(CommandContext<CommandSourceStack> ctx) {
+    private static int createSafetyNet(CommandContext<CommandSourceStack> ctx) {
+        final String safetyNetName = ctx.getArgument("name", String.class);
+        final int yLevel = ctx.getArgument("y-level", int.class);
+        final ColumnBlockPosition firstPosition = ctx.getArgument("pos-1", ColumnBlockPosition.class);
+        final ColumnBlockPosition secondPosition = ctx.getArgument("pos-2", ColumnBlockPosition.class);
+        final BlockPosition teleportPosition = ctx.getArgument("tp-location", BlockPosition.class);
+
         return Command.SINGLE_SUCCESS;
     }
 
