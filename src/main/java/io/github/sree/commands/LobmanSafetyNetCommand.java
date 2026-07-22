@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.sree.LobmanPlugin;
+import io.github.sree.safetynet.SafetyNet;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -44,6 +45,8 @@ public class LobmanSafetyNetCommand {
         final ColumnBlockPosition firstPosition = ctx.getArgument("pos-1", ColumnBlockPosition.class);
         final ColumnBlockPosition secondPosition = ctx.getArgument("pos-2", ColumnBlockPosition.class);
         final BlockPosition teleportPosition = ctx.getArgument("tp-location", BlockPosition.class);
+
+        SafetyNet.createSafetyNet(safetyNetName, yLevel, firstPosition, secondPosition, teleportPosition);
 
         return Command.SINGLE_SUCCESS;
     }

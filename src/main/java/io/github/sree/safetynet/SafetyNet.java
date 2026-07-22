@@ -1,5 +1,6 @@
 package io.github.sree.safetynet;
 
+import io.github.sree.LobmanPlugin;
 import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
 import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Location;
@@ -86,7 +87,9 @@ public class SafetyNet {
     }
 
     // Create safety net
-    public static SafetyNet createSafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition) {
-        return new SafetyNet(name, yLevel, firstPosition, secondPosition, teleportPosition);
+    public static void createSafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition) {
+        SafetyNet safetyNet = new SafetyNet(name, yLevel, firstPosition, secondPosition, teleportPosition);
+        var plugin = LobmanPlugin.getInstance();
+        plugin.getSafetyNets().add(safetyNet);
     }
 }

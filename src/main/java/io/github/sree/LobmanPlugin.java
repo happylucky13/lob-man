@@ -3,6 +3,7 @@ package io.github.sree;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.sree.commands.LobmanLobbyCommand;
 import io.github.sree.commands.LobmanSafetyNetCommand;
+import io.github.sree.safetynet.SafetyNet;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -10,11 +11,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class LobmanPlugin extends JavaPlugin {
 
     private static LobmanPlugin instance;
     private World lobbyWorld;
-    private String lobbyName = this.getConfig().getString("lobby-world");
+    private final String lobbyName = this.getConfig().getString("lobby-world");
+    private List<SafetyNet> safetyNets;
 
     @Override
     public void onEnable() {
@@ -41,6 +45,10 @@ public class LobmanPlugin extends JavaPlugin {
 
     public World getLobbyWorld() {
         return lobbyWorld;
+    }
+
+    public List<SafetyNet> getSafetyNets() {
+        return safetyNets;
     }
 
     public void setLobbyWorld(World lobbyWorld) {
