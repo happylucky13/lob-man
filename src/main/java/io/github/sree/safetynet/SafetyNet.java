@@ -1,10 +1,11 @@
 package io.github.sree.safetynet;
 
 import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
+import io.papermc.paper.math.BlockPosition;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SafetyNet {
@@ -12,6 +13,7 @@ public class SafetyNet {
     private int yLevel;
     private ColumnBlockPosition firstPosition;
     private ColumnBlockPosition secondPosition;
+    private BlockPosition teleportPosition;
 
     // Setters
     public void setName(String name) {
@@ -28,6 +30,10 @@ public class SafetyNet {
 
     public void setSecondPosition(ColumnBlockPosition secondPosition) {
         this.secondPosition = secondPosition;
+    }
+
+    public void setTeleportPosition(BlockPosition teleportPosition) {
+        this.teleportPosition = teleportPosition;
     }
 
     // Getters
@@ -47,10 +53,14 @@ public class SafetyNet {
         return secondPosition;
     }
 
+    public BlockPosition getTeleportPosition() {
+        return teleportPosition;
+    }
+
     // Detect if player is within bounds
-    @Nullable
-    public Player detectPlayer(World lobbyWorld) {
+    public List<Player> detectPlayer(World lobbyWorld) {
         List<Player> lobbyPlayers = lobbyWorld.getPlayers();
+        List<Player> detectedPlayers = new ArrayList<>();
 
         int xOne = firstPosition.blockX();
         int xTwo = secondPosition.blockX();
@@ -72,10 +82,10 @@ public class SafetyNet {
                 continue;
             }
 
-            return player;
+            detectedPlayers.add(player);
         }
 
-        return null;
+        return detectedPlayers;
     }
 
 
