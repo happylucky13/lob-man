@@ -1,6 +1,7 @@
 package io.github.sree;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.github.sree.commands.LobmanLobbyCommand;
 import io.github.sree.commands.LobmanSafetyNetCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -22,6 +23,7 @@ public class LobmanPlugin extends JavaPlugin {
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(LobmanSafetyNetCommand.createCommand())
+                .then(LobmanLobbyCommand.createCommand())
                 .build();
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
