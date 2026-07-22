@@ -86,7 +86,7 @@ public class SafetyNet {
 
         for(Player player: detectedPlayers) {
             player.teleportAsync(centeredLocation);
-            player.setVelocity(new Vector(0, 0, 0));
+            player.setFallDistance(0.0f);
         }
     }
 
