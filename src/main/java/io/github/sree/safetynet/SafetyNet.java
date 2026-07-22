@@ -2,6 +2,7 @@ package io.github.sree.safetynet;
 
 import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
 import io.papermc.paper.math.BlockPosition;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -86,6 +87,15 @@ public class SafetyNet {
         }
 
         return detectedPlayers;
+    }
+
+    // Teleport all players within bounds
+    public void teleportPlayers(List<Player> detectedPlayers, World lobbyWorld) {
+        Location centeredLocation = teleportPosition.toCenter().toLocation(lobbyWorld);
+
+        for(Player player: detectedPlayers) {
+            player.teleportAsync(centeredLocation);
+        }
     }
 
 
