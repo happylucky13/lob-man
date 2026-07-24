@@ -1,8 +1,5 @@
 package io.github.sree.safetynet;
 
-import io.github.sree.LobmanPlugin;
-import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
-import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -17,16 +14,24 @@ import java.util.Map;
 public class SafetyNet implements ConfigurationSerializable {
     private final String name;
     private final int yLevel;
-    private final ColumnBlockPosition firstPosition;
-    private final ColumnBlockPosition secondPosition;
-    private final BlockPosition teleportPosition;
 
-    private SafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition) {
+    private final int minX;
+    private final int maxX;
+    private final int minZ;
+    private final int maxZ;
+
+    private final Location tpLocation;
+
+    private SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
         this.name = name;
         this.yLevel = yLevel;
-        this.firstPosition = firstPosition;
-        this.secondPosition = secondPosition;
-        this.teleportPosition = teleportPosition;
+
+        this.minX = Math.min(x1, x2);
+        this.maxX = Math.max(x1, x2);
+        this.minZ = Math.min(z1, z2);
+        this.maxZ = Math.max(z1, z2);
+
+        this.tpLocation = tpLocation;
     }
 
     // Getters
@@ -38,16 +43,8 @@ public class SafetyNet implements ConfigurationSerializable {
         return yLevel;
     }
 
-    public ColumnBlockPosition getFirstPosition() {
-        return firstPosition;
-    }
-
-    public ColumnBlockPosition getSecondPosition() {
-        return secondPosition;
-    }
-
-    public BlockPosition getTeleportPosition() {
-        return teleportPosition;
+    public Location getTpLocation() {
+        return tpLocation;
     }
 
     // Detect if player is within bounds
@@ -55,46 +52,28 @@ public class SafetyNet implements ConfigurationSerializable {
         List<Player> lobbyPlayers = lobbyWorld.getPlayers();
         List<Player> detectedPlayers = new ArrayList<>();
 
-        int xOne = firstPosition.blockX();
-        int xTwo = secondPosition.blockX();
-        int zOne = firstPosition.blockZ();
-        int zTwo = secondPosition.blockZ();
-
         for(Player player : lobbyPlayers) {
 
             // Check player position
-            if(!(player.getY() <= yLevel)) {
-                continue;
+            if (player.getY() <= yLevel
+                    && player.getX() >= minX
+                    && player.getX() <= maxX
+                    && player.getZ() >= minZ
+                    && player.getZ() <= maxZ
+            ) {
+                detectedPlayers.add(player);
             }
-
-            if(!(player.getX() >= Math.min(xOne, xTwo) && player.getX() <= Math.max(xOne, xTwo))) {
-                continue;
-            }
-
-            if(!(player.getZ() >= Math.min(zOne, zTwo) && player.getZ() <= Math.max(zOne, zTwo))) {
-                continue;
-            }
-
-            detectedPlayers.add(player);
         }
 
         return detectedPlayers;
     }
 
     // Teleport all players within bounds
-    public void teleportPlayers(List<Player> detectedPlayers, World lobbyWorld) {
-        Location centeredLocation = teleportPosition.toCenter().toLocation(lobbyWorld);
-
+    public void teleportPlayers(List<Player> detectedPlayers) {
         for(Player player: detectedPlayers) {
-            player.teleportAsync(centeredLocation);
+            player.teleportAsync(tpLocation);
             player.setFallDistance(0.0f);
         }
-    }
-
-    // Create safety net
-    public static void createSafetyNet(String name, int yLevel, ColumnBlockPosition firstPosition, ColumnBlockPosition secondPosition, BlockPosition teleportPosition, LobmanPlugin plugin) {
-        SafetyNet safetyNet = new SafetyNet(name, yLevel, firstPosition, secondPosition, teleportPosition);
-        plugin.getSafetyNets().add(safetyNet);
     }
 
     @NotNull
@@ -104,70 +83,26 @@ public class SafetyNet implements ConfigurationSerializable {
         data.put("name", this.name);
         data.put("y-level", this.yLevel);
 
-        data.put("first-position-x", this.firstPosition.blockX());
-        data.put("first-position-z", this.firstPosition.blockZ());
+        data.put("min-x", this.minX);
+        data.put("max-x", this.maxX);
+        data.put("min-z", this.minZ);
+        data.put("max-z", this.maxZ);
 
-        data.put("second-position-x", this.secondPosition.blockX());
-        data.put("second-position-z", this.secondPosition.blockZ());
-
-        data.put("teleport-position-x", this.teleportPosition.blockX());
-        data.put("teleport-position-y", this.teleportPosition.blockY());
-        data.put("teleport-position-z", this.teleportPosition.blockZ());
+        data.put("tp-location", this.tpLocation);
 
         return data;
     }
 
     public static SafetyNet deserialize(Map<String, Object> args) {
 
-        // Messy ahh code, fix later
-        ColumnBlockPosition firstPosition = new ColumnBlockPosition() {
-            @Override
-            public int blockX() {
-                return (int) args.get("first-position-x");
-            }
-
-            @Override
-            public int blockZ() {
-                return (int) args.get("first-position-z");
-            }
-        };
-
-        ColumnBlockPosition secondPosition = new ColumnBlockPosition() {
-            @Override
-            public int blockX() {
-                return (int) args.get("second-position-x");
-            }
-
-            @Override
-            public int blockZ() {
-                return (int) args.get("second-position-z");
-            }
-        };
-
-        BlockPosition teleportPosition = new BlockPosition() {
-            @Override
-            public int blockX() {
-                return (int) args.get("teleport-position-x");
-            }
-
-            @Override
-            public int blockY() {
-                return (int) args.get("teleport-position-y");
-            }
-
-            @Override
-            public int blockZ() {
-                return (int) args.get("teleport-position-z");
-            }
-        };
-
-
         return new SafetyNet(
                 (String) args.get("name"),
                 (int) args.get("y-level"),
-                firstPosition,
-                secondPosition,
-                teleportPosition
+                (int) args.get("min-x"),
+                (int) args.get("max-x"),
+                (int) args.get("min-z"),
+                (int) args.get("max-z"),
+                (Location) args.get("tp-location")
         );
 
     }

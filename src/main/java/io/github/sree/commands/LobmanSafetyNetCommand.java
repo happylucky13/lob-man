@@ -49,8 +49,6 @@ public class LobmanSafetyNetCommand {
         final ColumnBlockPosition secondPosition = ctx.getArgument("pos-2", ColumnBlockPositionResolver.class).resolve(ctx.getSource());
         final BlockPosition teleportPosition = ctx.getArgument("tp-location", BlockPositionResolver.class).resolve(ctx.getSource());
 
-        SafetyNet.createSafetyNet(safetyNetName, yLevel, firstPosition, secondPosition, teleportPosition);
-
         return Command.SINGLE_SUCCESS;
     }
 
