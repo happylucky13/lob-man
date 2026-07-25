@@ -25,8 +25,10 @@ public class LobmanPlugin extends JavaPlugin {
         ConfigurationSerialization.registerClass(SafetyNet.class);
 
         // Register lobman command
+        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, safetyNets);
+
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
-                .then(LobmanSafetyNetCommand.createCommand(safetyNetManager, this))
+                .then(safetyNetCommand.createCommand())
                 .build();
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
