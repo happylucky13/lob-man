@@ -26,7 +26,7 @@ import org.bukkit.command.CommandSender;
 
 public class LobmanSafetyNetCommand {
 
-    public static LiteralArgumentBuilder<CommandSourceStack> createCommand(SafetyNetManager safetyNetManager) {
+    public static LiteralArgumentBuilder<CommandSourceStack> createCommand(SafetyNetManager safetyNetManager, LobmanPlugin plugin) {
         return Commands.literal("safety_net")
                 .then(Commands.literal("create")
                         .then(Commands.argument("name", StringArgumentType.word())
@@ -49,7 +49,7 @@ public class LobmanSafetyNetCommand {
                         )
                 )
                 .then(Commands.literal("get")
-                        .executes(LobmanSafetyNetCommand::getSafetyNets)
+                        .executes(ctx -> LobmanSafetyNetCommand.getSafetyNets(ctx, plugin))
                 );
     }
 
@@ -77,9 +77,8 @@ public class LobmanSafetyNetCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int getSafetyNets(CommandContext<CommandSourceStack> ctx) {
+    private static int getSafetyNets(CommandContext<CommandSourceStack> ctx, LobmanPlugin plugin) {
         CommandSender sender = ctx.getSource().getSender();
-        var plugin = LobmanPlugin.getInstance();
 
         for(SafetyNet safetyNet : plugin.getSafetyNets()) {
             sender.sendMessage(Component.text("Name: " + safetyNet.getName(), NamedTextColor.GREEN));

@@ -16,20 +16,17 @@ import java.util.List;
 
 public class LobmanPlugin extends JavaPlugin {
 
-    private static LobmanPlugin instance;
     private final List<SafetyNet> safetyNets = new ArrayList<>();
     private final SafetyNetManager safetyNetManager = new SafetyNetManager(this);
 
     @Override
     public void onEnable() {
-        instance = this;
-        getLogger().info("Plugin started!");
 
         ConfigurationSerialization.registerClass(SafetyNet.class);
 
         // Register lobman command
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
-                .then(LobmanSafetyNetCommand.createCommand(safetyNetManager))
+                .then(LobmanSafetyNetCommand.createCommand(safetyNetManager, this))
                 .build();
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
@@ -39,10 +36,6 @@ public class LobmanPlugin extends JavaPlugin {
         // Load safety nets from disk and start scheduler
         safetyNetManager.loadSafetyNetsFromConfig();
         safetyNetManager.scheduleSafetyNets();
-    }
-
-    public static LobmanPlugin getInstance() {
-        return instance;
     }
 
     public List<SafetyNet> getSafetyNets() {
