@@ -36,18 +36,9 @@ public class LobmanPlugin extends JavaPlugin {
             commands.registrar().register(lobmanCommand);
         });
 
-        // Load safety nets from disk
+        // Load safety nets from disk and start scheduler
         safetyNetManager.loadSafetyNetsFromConfig();
-
-
-        // Safety Net Scheduler
-        BukkitScheduler scheduler = getServer().getScheduler();
-
-        scheduler.runTaskTimer(this, task -> {
-            for(SafetyNet safetyNet : safetyNets) {
-                safetyNet.teleportPlayers();
-            }
-        }, 0L, 1L);
+        safetyNetManager.scheduleSafetyNets();
     }
 
     public static LobmanPlugin getInstance() {

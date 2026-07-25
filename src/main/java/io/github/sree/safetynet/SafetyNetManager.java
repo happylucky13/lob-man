@@ -1,9 +1,11 @@
 package io.github.sree.safetynet;
 
 import io.github.sree.LobmanPlugin;
+import io.github.sree.commands.LobmanSafetyNetCommand;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,5 +82,15 @@ public class SafetyNetManager {
         }
 
         plugin.getLogger().info("Successfully loaded " + plugin.getSafetyNets().size() + " safety net(s).");
+    }
+
+    public void scheduleSafetyNets() {
+        BukkitScheduler scheduler = plugin.getServer().getScheduler();
+
+        scheduler.runTaskTimer(plugin, task -> {
+            for(SafetyNet safetyNet : plugin.getSafetyNets()) {
+                safetyNet.teleportPlayers();
+            }
+        }, 0L, 1L);
     }
 }
