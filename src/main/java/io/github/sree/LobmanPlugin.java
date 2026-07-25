@@ -45,7 +45,7 @@ public class LobmanPlugin extends JavaPlugin {
 
         scheduler.runTaskTimer(this, task -> {
             for(SafetyNet safetyNet : safetyNets) {
-                safetyNet.teleportPlayers(safetyNet.detectPlayer(lobbyWorld));
+                safetyNet.teleportPlayers();
             }
         }, 0L, 1L);
     }

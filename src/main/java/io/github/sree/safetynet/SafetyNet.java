@@ -1,5 +1,6 @@
 package io.github.sree.safetynet;
 
+import io.github.sree.LobmanPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -22,7 +23,7 @@ public class SafetyNet implements ConfigurationSerializable {
 
     private final Location tpLocation;
 
-    private SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
+    private SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation, World world) {
         this.name = name;
         this.yLevel = yLevel;
 
@@ -31,6 +32,7 @@ public class SafetyNet implements ConfigurationSerializable {
         this.minZ = Math.min(z1, z2);
         this.maxZ = Math.max(z1, z2);
 
+        tpLocation.setWorld(world);
         this.tpLocation = tpLocation;
     }
 
@@ -48,8 +50,8 @@ public class SafetyNet implements ConfigurationSerializable {
     }
 
     // Detect if player is within bounds
-    public List<Player> detectPlayer(World lobbyWorld) {
-        List<Player> lobbyPlayers = lobbyWorld.getPlayers();
+    public List<Player> detectPlayer() {
+        List<Player> lobbyPlayers = tpLocation.getWorld().getPlayers();
         List<Player> detectedPlayers = new ArrayList<>();
 
         for(Player player : lobbyPlayers) {
@@ -69,8 +71,8 @@ public class SafetyNet implements ConfigurationSerializable {
     }
 
     // Teleport all players within bounds
-    public void teleportPlayers(List<Player> detectedPlayers) {
-        for(Player player: detectedPlayers) {
+    public void teleportPlayers() {
+        for(Player player: this.detectPlayer()) {
             player.teleportAsync(tpLocation);
             player.setFallDistance(0.0f);
         }
@@ -89,6 +91,7 @@ public class SafetyNet implements ConfigurationSerializable {
         data.put("max-z", this.maxZ);
 
         data.put("tp-location", this.tpLocation);
+        data.put("world", this.tpLocation.getWorld());
 
         return data;
     }
@@ -102,7 +105,8 @@ public class SafetyNet implements ConfigurationSerializable {
                 (int) args.get("max-x"),
                 (int) args.get("min-z"),
                 (int) args.get("max-z"),
-                (Location) args.get("tp-location")
+                (Location) args.get("tp-location"),
+                (World) args.get("world")
         );
 
     }
