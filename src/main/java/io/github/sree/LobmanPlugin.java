@@ -9,7 +9,7 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -27,6 +27,8 @@ public class LobmanPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         getLogger().info("Plugin started!");
+
+        ConfigurationSerialization.registerClass(SafetyNet.class);
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(LobmanSafetyNetCommand.createCommand())

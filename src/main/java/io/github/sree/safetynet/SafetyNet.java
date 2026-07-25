@@ -1,6 +1,5 @@
 package io.github.sree.safetynet;
 
-import io.github.sree.LobmanPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -23,7 +22,7 @@ public class SafetyNet implements ConfigurationSerializable {
 
     private final Location tpLocation;
 
-    private SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation, World world) {
+    public SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation, World world) {
         this.name = name;
         this.yLevel = yLevel;
 
