@@ -1,7 +1,6 @@
 package io.github.sree.safetynet;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ public class SafetyNet implements ConfigurationSerializable {
 
     private final Location tpLocation;
 
-    public SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation, World world) {
+    public SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
         this.name = name;
         this.yLevel = yLevel;
 
@@ -31,7 +30,6 @@ public class SafetyNet implements ConfigurationSerializable {
         this.minZ = Math.min(z1, z2);
         this.maxZ = Math.max(z1, z2);
 
-        tpLocation.setWorld(world);
         this.tpLocation = tpLocation;
     }
 
@@ -104,8 +102,7 @@ public class SafetyNet implements ConfigurationSerializable {
                 (int) args.get("max-x"),
                 (int) args.get("min-z"),
                 (int) args.get("max-z"),
-                (Location) args.get("tp-location"),
-                (World) args.get("world")
+                (Location) args.get("tp-location")
         );
 
     }

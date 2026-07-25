@@ -14,8 +14,8 @@ public class SafetyNetManager {
         this.plugin = plugin;
     }
 
-    public void createAndRegisterSafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation, World world) {
-        SafetyNet safetyNet = new SafetyNet(name, yLevel, x1, x2, z1, z2, tpLocation, world);
+    public void createAndRegisterSafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
+        SafetyNet safetyNet = new SafetyNet(name, yLevel, x1, x2, z1, z2, tpLocation);
 
         FileConfiguration config = plugin.getConfig();
 
