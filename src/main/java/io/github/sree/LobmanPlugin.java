@@ -28,6 +28,7 @@ public class LobmanPlugin extends JavaPlugin {
 
         ConfigurationSerialization.registerClass(SafetyNet.class);
 
+        // Register lobman command
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(LobmanSafetyNetCommand.createCommand(safetyNetManager))
                 .build();
@@ -36,6 +37,11 @@ public class LobmanPlugin extends JavaPlugin {
             commands.registrar().register(lobmanCommand);
         });
 
+        // Load safety nets from disk
+        safetyNetManager.loadSafetyNetsFromConfig();
+
+
+        // Safety Net Scheduler
         BukkitScheduler scheduler = getServer().getScheduler();
 
         scheduler.runTaskTimer(this, task -> {

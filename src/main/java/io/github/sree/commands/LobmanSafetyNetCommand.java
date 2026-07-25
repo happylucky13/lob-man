@@ -13,14 +13,15 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.position.ColumnBlockPosition;
-import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.ColumnBlockPositionResolver;
-import io.papermc.paper.math.BlockPosition;
+import io.papermc.paper.command.brigadier.argument.resolvers.FinePositionResolver;
+import io.papermc.paper.command.brigadier.argument.resolvers.RotationResolver;
+import io.papermc.paper.math.FinePosition;
+import io.papermc.paper.math.Rotation;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 
 public class LobmanSafetyNetCommand {
@@ -32,8 +33,10 @@ public class LobmanSafetyNetCommand {
                                 .then(Commands.argument("y-level", IntegerArgumentType.integer())
                                         .then(Commands.argument("pos-1", ArgumentTypes.columnBlockPosition())
                                                 .then(Commands.argument("pos-2", ArgumentTypes.columnBlockPosition())
-                                                        .then(Commands.argument("tp-location", ArgumentTypes.finePosition())
-                                                                .executes(ctx -> createSafetyNet(ctx, safetyNetManager))
+                                                        .then(Commands.argument("tp-position", ArgumentTypes.finePosition())
+                                                                .then(Commands.argument("tp-rotation", ArgumentTypes.rotation())
+                                                                        .executes(ctx -> createSafetyNet(ctx, safetyNetManager))
+                                                                )
                                                         )
                                                 )
                                         )
@@ -46,11 +49,16 @@ public class LobmanSafetyNetCommand {
     }
 
     private static int createSafetyNet(CommandContext<CommandSourceStack> ctx, SafetyNetManager safetyNetManager) throws CommandSyntaxException {
+        CommandSourceStack source = ctx.getSource();
+
         final String name = ctx.getArgument("name", String.class);
         final int yLevel = ctx.getArgument("y-level", int.class);
         final ColumnBlockPosition firstPosition = ctx.getArgument("pos-1", ColumnBlockPositionResolver.class).resolve(ctx.getSource());
         final ColumnBlockPosition secondPosition = ctx.getArgument("pos-2", ColumnBlockPositionResolver.class).resolve(ctx.getSource());
-        final Location tpLocation = ctx.getArgument("tp-location", Location.class);
+
+        final FinePosition tpPosition = ctx.getArgument("tp-position", FinePositionResolver.class).resolve(ctx.getSource());
+        final Rotation tpRotation = ctx.getArgument("tp-rotation", RotationResolver.class).resolve(ctx.getSource());
+        final Location tpLocation = new Location(source.getLocation().getWorld(), tpPosition.x(), tpPosition.y(), tpPosition.z(), tpRotation.yaw(), tpRotation.pitch());
 
         safetyNetManager.createAndRegisterSafetyNet(name, yLevel, firstPosition.blockX(), secondPosition.blockX(), firstPosition.blockZ(), secondPosition.blockZ(), tpLocation);
 
