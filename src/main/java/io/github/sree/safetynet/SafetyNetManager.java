@@ -1,7 +1,6 @@
 package io.github.sree.safetynet;
 
 import io.github.sree.LobmanPlugin;
-import io.github.sree.commands.LobmanSafetyNetCommand;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,6 +8,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SafetyNetManager {
 
@@ -29,7 +29,7 @@ public class SafetyNetManager {
         // debug
         plugin.getLogger().info(config.saveToString());
 
-        plugin.getSafetyNets().add(safetyNet);
+        plugin.getActiveSafetyNets().add(safetyNet);
     }
 
     public void deleteAndRemoveSafetyNet(String name) {
@@ -49,7 +49,7 @@ public class SafetyNetManager {
             }
         }
 
-        plugin.getSafetyNets().removeAll(removedSafetyNets);
+        plugin.getActiveSafetyNets().removeAll(removedSafetyNets);
         plugin.saveConfig();
         plugin.getLogger().info("Successfully removed " + removedSafetyNets.size() + " safety nets.");
     }
@@ -57,7 +57,7 @@ public class SafetyNetManager {
     public void loadSafetyNetsFromConfig() {
 
         // Clear cache
-        plugin.getSafetyNets().clear();
+        plugin.getActiveSafetyNets().clear();
 
         FileConfiguration config = plugin.getConfig();
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
@@ -72,7 +72,7 @@ public class SafetyNetManager {
                 SafetyNet safetyNet = (SafetyNet) section.get(key);
 
                 if(safetyNet != null) {
-                    plugin.getSafetyNets().add(safetyNet);
+                    plugin.getActiveSafetyNets().add(safetyNet);
                 }
             }
             catch (Exception e){
@@ -81,14 +81,14 @@ public class SafetyNetManager {
             }
         }
 
-        plugin.getLogger().info("Successfully loaded " + plugin.getSafetyNets().size() + " safety net(s).");
+        plugin.getLogger().info("Successfully loaded " + plugin.getActiveSafetyNets().size() + " safety net(s).");
     }
 
     public void scheduleSafetyNets() {
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
 
         scheduler.runTaskTimer(plugin, task -> {
-            for(SafetyNet safetyNet : plugin.getSafetyNets()) {
+            for(SafetyNet safetyNet : plugin.getActiveSafetyNets()) {
                 safetyNet.teleportPlayers();
             }
         }, 0L, 1L);

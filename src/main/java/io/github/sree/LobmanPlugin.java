@@ -9,23 +9,22 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LobmanPlugin extends JavaPlugin {
 
-    private final List<SafetyNet> safetyNets = new ArrayList<>();
-    private final SafetyNetManager safetyNetManager = new SafetyNetManager(this);
+    private final List<SafetyNet> activeSafetyNets = new ArrayList<>();
 
     @Override
     public void onEnable() {
+        SafetyNetManager safetyNetManager = new SafetyNetManager(this);
 
         ConfigurationSerialization.registerClass(SafetyNet.class);
 
         // Register lobman command
-        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, safetyNets);
+        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, activeSafetyNets);
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(safetyNetCommand.createCommand())
@@ -40,7 +39,7 @@ public class LobmanPlugin extends JavaPlugin {
         safetyNetManager.scheduleSafetyNets();
     }
 
-    public List<SafetyNet> getSafetyNets() {
-        return safetyNets;
+    public List<SafetyNet> getActiveSafetyNets() {
+        return activeSafetyNets;
     }
 }
