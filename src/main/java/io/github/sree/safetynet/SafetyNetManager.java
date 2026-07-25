@@ -5,6 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SafetyNetManager {
 
     private final LobmanPlugin plugin;
@@ -25,6 +28,28 @@ public class SafetyNetManager {
         plugin.getLogger().info(config.saveToString());
 
         plugin.getSafetyNets().add(safetyNet);
+    }
+
+    public void deleteAndRemoveSafetyNet(String name) {
+        List<SafetyNet> removedSafetyNets = new ArrayList<>();
+
+        FileConfiguration config = plugin.getConfig();
+        ConfigurationSection section = config.getConfigurationSection("safety-nets");
+
+        if(section == null) {
+            return;
+        }
+
+        for(String key : section.getKeys(false)) {
+            if(key.equals(name)) {
+                section.set(key, null);
+                removedSafetyNets.add((SafetyNet) section.get(key));
+            }
+        }
+
+        plugin.getSafetyNets().removeAll(removedSafetyNets);
+        plugin.saveConfig();
+        plugin.getLogger().info("Successfully removed " + removedSafetyNets.size() + " safety nets.");
     }
 
     public void loadSafetyNetsFromConfig() {

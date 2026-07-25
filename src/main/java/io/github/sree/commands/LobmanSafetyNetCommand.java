@@ -43,6 +43,11 @@ public class LobmanSafetyNetCommand {
                                 )
                         )
                 )
+                .then(Commands.literal("remove")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                                .executes(ctx -> LobmanSafetyNetCommand.removeSafetyNet(ctx, safetyNetManager))
+                        )
+                )
                 .then(Commands.literal("get")
                         .executes(LobmanSafetyNetCommand::getSafetyNets)
                 );
@@ -62,6 +67,13 @@ public class LobmanSafetyNetCommand {
 
         safetyNetManager.createAndRegisterSafetyNet(name, yLevel, firstPosition.blockX(), secondPosition.blockX(), firstPosition.blockZ(), secondPosition.blockZ(), tpLocation);
 
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int removeSafetyNet(CommandContext<CommandSourceStack> ctx, SafetyNetManager safetyNetManager) {
+        final String name = ctx.getArgument("name", String.class);
+
+        safetyNetManager.deleteAndRemoveSafetyNet(name);
         return Command.SINGLE_SUCCESS;
     }
 
