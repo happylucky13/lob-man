@@ -17,7 +17,6 @@ import java.util.List;
 public class LobmanPlugin extends JavaPlugin {
 
     private static LobmanPlugin instance;
-    private final String lobbyName = this.getConfig().getString("lobby-world");
     private final List<SafetyNet> safetyNets = new ArrayList<>();
     private final SafetyNetManager safetyNetManager = new SafetyNetManager(this);
 

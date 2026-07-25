@@ -2,7 +2,6 @@ package io.github.sree.safetynet;
 
 import io.github.sree.LobmanPlugin;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -22,6 +21,9 @@ public class SafetyNetManager {
         config.set("safety-nets." + safetyNet.getName(), safetyNet);
         plugin.saveConfig();
 
+        // debug
+        plugin.getLogger().info(config.saveToString());
+
         plugin.getSafetyNets().add(safetyNet);
     }
 
@@ -34,6 +36,7 @@ public class SafetyNetManager {
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
 
         if(section == null) {
+            plugin.getLogger().warning("There are no safety nets saved.");
             return;
         }
 
@@ -47,6 +50,7 @@ public class SafetyNetManager {
             }
             catch (Exception e){
                 plugin.getLogger().warning("Failed to load safety net: " + key);
+                e.printStackTrace();
             }
         }
 

@@ -88,7 +88,6 @@ public class SafetyNet implements ConfigurationSerializable {
         data.put("max-z", this.maxZ);
 
         data.put("tp-location", this.tpLocation);
-        data.put("world", this.tpLocation.getWorld());
 
         return data;
     }
