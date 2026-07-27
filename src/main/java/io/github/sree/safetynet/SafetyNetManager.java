@@ -25,9 +25,6 @@ public class SafetyNetManager {
         config.set("safety-nets." + safetyNet.getName(), safetyNet);
         plugin.saveConfig();
 
-        // debug
-        plugin.getLogger().info(config.saveToString());
-
         plugin.getActiveSafetyNets().add(safetyNet);
     }
 
