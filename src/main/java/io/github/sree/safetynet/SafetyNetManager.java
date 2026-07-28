@@ -18,36 +18,25 @@ public class SafetyNetManager {
     }
 
     public void createAndRegisterSafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
-        SafetyNet safetyNet = new SafetyNet(name, yLevel, x1, x2, z1, z2, tpLocation);
+        SafetyNet safetyNet = new SafetyNet(yLevel, x1, x2, z1, z2, tpLocation);
 
         FileConfiguration config = plugin.getConfig();
 
-        config.set("safety-nets." + safetyNet.getName(), safetyNet);
+        config.set("safety-nets." + name, safetyNet);
         plugin.saveConfig();
 
-        plugin.getActiveSafetyNets().add(safetyNet);
+        plugin.getActiveSafetyNets().put(name, safetyNet);
     }
 
     public void deleteAndRemoveSafetyNet(String name) {
-        List<SafetyNet> removedSafetyNets = new ArrayList<>();
-
         FileConfiguration config = plugin.getConfig();
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
 
-        if(section == null) {
-            return;
-        }
+        section.set(name, null);
+        plugin.getActiveSafetyNets().remove(name);
 
-        for(String key : section.getKeys(false)) {
-            if(key.equals(name)) {
-                section.set(key, null);
-                removedSafetyNets.add((SafetyNet) section.get(key));
-            }
-        }
-
-        plugin.getActiveSafetyNets().removeAll(removedSafetyNets);
         plugin.saveConfig();
-        plugin.getLogger().info("Successfully removed " + removedSafetyNets.size() + " safety nets.");
+        plugin.getLogger().info("Successfully removed safety nets.");
     }
 
     public void loadSafetyNetsFromConfig() {
@@ -59,22 +48,13 @@ public class SafetyNetManager {
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
 
         if(section == null) {
-            plugin.getLogger().warning("There are no safety nets saved.");
+            plugin.getLogger().info("There are no safety nets saved.");
             return;
         }
 
         for(String key: section.getKeys(false)) {
-            try {
-                SafetyNet safetyNet = (SafetyNet) section.get(key);
-
-                if(safetyNet != null) {
-                    plugin.getActiveSafetyNets().add(safetyNet);
-                }
-            }
-            catch (Exception e){
-                plugin.getLogger().warning("Failed to load safety net: " + key);
-                e.printStackTrace();
-            }
+            SafetyNet safetyNet = (SafetyNet) section.get(key);
+            plugin.getActiveSafetyNets().put(key, safetyNet);
         }
 
         plugin.getLogger().info("Successfully loaded " + plugin.getActiveSafetyNets().size() + " safety net(s).");
@@ -84,7 +64,7 @@ public class SafetyNetManager {
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
 
         scheduler.runTaskTimer(plugin, task -> {
-            for(SafetyNet safetyNet : plugin.getActiveSafetyNets()) {
+            for(SafetyNet safetyNet : plugin.getActiveSafetyNets().values()) {
                 safetyNet.teleportPlayers();
             }
         }, 0L, 1L);

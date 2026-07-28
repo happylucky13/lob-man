@@ -110,10 +110,10 @@ public class LobmanSafetyNetCommand {
     private int getSafetyNets(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
 
-        for(SafetyNet safetyNet : activeSafetyNets) {
-            sender.sendMessage(Component.text("Name: " + safetyNet.getName(), NamedTextColor.GREEN));
-            sender.sendMessage(Component.text("Y-Level: " + safetyNet.getYLevel(), NamedTextColor.GOLD));
-            sender.sendMessage(Component.text("Teleport Location: " + safetyNet.getTpLocation(), NamedTextColor.GOLD));
+        for(String name : activeSafetyNets.keySet()) {
+            sender.sendMessage(Component.text("Name: " + activeSafetyNets.get(name), NamedTextColor.GREEN));
+            sender.sendMessage(Component.text("Y-Level: " + activeSafetyNets.get(name).getYLevel(), NamedTextColor.GOLD));
+            sender.sendMessage(Component.text("Teleport Location: " + activeSafetyNets.get(name).getTpLocation(), NamedTextColor.GOLD));
             sender.sendMessage(Component.text("------------------------------"));
         }
 
