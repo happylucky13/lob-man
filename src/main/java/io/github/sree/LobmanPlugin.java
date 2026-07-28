@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class LobmanPlugin extends JavaPlugin {
-
-    private final Map<String, SafetyNet> activeSafetyNets = new HashMap<>();
-
     @Override
     public void onEnable() {
         SafetyNetManager safetyNetManager = new SafetyNetManager(this);
@@ -28,7 +25,7 @@ public class LobmanPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(selectionManager, this);
 
         // Register lobman command
-        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, activeSafetyNets, selectionManager.getActiveSelections());
+        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, safetyNetManager.getActiveSafetyNets(), selectionManager.getActiveSelections());
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(safetyNetCommand.createCommand())
@@ -41,9 +38,5 @@ public class LobmanPlugin extends JavaPlugin {
         // Load safety nets from disk and start scheduler
         safetyNetManager.loadSafetyNetsFromConfig();
         safetyNetManager.scheduleSafetyNets();
-    }
-
-    public Map<String, SafetyNet> getActiveSafetyNets() {
-        return activeSafetyNets;
     }
 }

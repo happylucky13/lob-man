@@ -7,14 +7,21 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SafetyNetManager {
 
     private final LobmanPlugin plugin;
+    private final Map<String, SafetyNet> activeSafetyNets = new HashMap<>();
 
     public SafetyNetManager(LobmanPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    public Map<String, SafetyNet> getActiveSafetyNets() {
+        return activeSafetyNets;
     }
 
     public void createAndRegisterSafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
@@ -25,7 +32,7 @@ public class SafetyNetManager {
         config.set("safety-nets." + name, safetyNet);
         plugin.saveConfig();
 
-        plugin.getActiveSafetyNets().put(name, safetyNet);
+        activeSafetyNets.put(name, safetyNet);
     }
 
     public void deleteAndRemoveSafetyNet(String name) {
@@ -33,7 +40,7 @@ public class SafetyNetManager {
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
 
         section.set(name, null);
-        plugin.getActiveSafetyNets().remove(name);
+        activeSafetyNets.remove(name);
 
         plugin.saveConfig();
         plugin.getLogger().info("Successfully removed safety nets.");
@@ -42,7 +49,7 @@ public class SafetyNetManager {
     public void loadSafetyNetsFromConfig() {
 
         // Clear cache
-        plugin.getActiveSafetyNets().clear();
+        activeSafetyNets.clear();
 
         FileConfiguration config = plugin.getConfig();
         ConfigurationSection section = config.getConfigurationSection("safety-nets");
@@ -54,17 +61,17 @@ public class SafetyNetManager {
 
         for(String key: section.getKeys(false)) {
             SafetyNet safetyNet = (SafetyNet) section.get(key);
-            plugin.getActiveSafetyNets().put(key, safetyNet);
+            activeSafetyNets.put(key, safetyNet);
         }
 
-        plugin.getLogger().info("Successfully loaded " + plugin.getActiveSafetyNets().size() + " safety net(s).");
+        plugin.getLogger().info("Successfully loaded " + activeSafetyNets.size() + " safety net(s).");
     }
 
     public void scheduleSafetyNets() {
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
 
         scheduler.runTaskTimer(plugin, task -> {
-            for(SafetyNet safetyNet : plugin.getActiveSafetyNets().values()) {
+            for(SafetyNet safetyNet : activeSafetyNets.values()) {
                 safetyNet.teleportPlayers();
             }
         }, 0L, 1L);
