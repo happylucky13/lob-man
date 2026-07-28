@@ -32,9 +32,6 @@ public class SafetyNet implements ConfigurationSerializable {
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
 
     public int getYLevel() {
         return yLevel;
@@ -80,7 +77,6 @@ public class SafetyNet implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("name", this.name);
         data.put("y-level", this.yLevel);
 
         data.put("min-x", this.minX);
@@ -96,7 +92,6 @@ public class SafetyNet implements ConfigurationSerializable {
     public static SafetyNet deserialize(Map<String, Object> args) {
 
         return new SafetyNet(
-                (String) args.get("name"),
                 (int) args.get("y-level"),
                 (int) args.get("min-x"),
                 (int) args.get("max-x"),
