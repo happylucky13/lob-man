@@ -15,6 +15,14 @@ public class RegionSelection {
         this.secondCorner = location;
     }
 
+    public Location getFirstCorner() {
+        return firstCorner;
+    }
+
+    public Location getSecondCorner() {
+        return secondCorner;
+    }
+
     public boolean isComplete() {
         return firstCorner != null && secondCorner != null;
     }

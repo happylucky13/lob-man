@@ -27,7 +27,7 @@ public class LobmanPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(selectionManager, this);
 
         // Register lobman command
-        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, activeSafetyNets);
+        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, activeSafetyNets, selectionManager.getActiveSelections());
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(safetyNetCommand.createCommand())

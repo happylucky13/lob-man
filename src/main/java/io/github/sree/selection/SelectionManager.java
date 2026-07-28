@@ -18,6 +18,11 @@ public class SelectionManager implements Listener {
 
     private final Map<Player, RegionSelection> activeSelections = new HashMap<>();
 
+    // Getter
+    public Map<Player, RegionSelection> getActiveSelections() {
+        return activeSelections;
+    }
+
     public void beginSelection(Player player) {
         activeSelections.put(player, new RegionSelection());
     }
