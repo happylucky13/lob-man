@@ -53,12 +53,15 @@ public class SafetyNet implements ConfigurationSerializable {
 
         for(Player player : lobbyPlayers) {
 
+            int x = player.getLocation().getBlockX();
+            int z = player.getLocation().getBlockZ();
+
             // Check player position
             if (player.getY() <= yLevel
-                    && player.getX() >= minX
-                    && player.getX() <= maxX
-                    && player.getZ() >= minZ
-                    && player.getZ() <= maxZ
+                    && x >= minX
+                    && x <= maxX
+                    && z >= minZ
+                    && z <= maxZ
             ) {
                 detectedPlayers.add(player);
             }
