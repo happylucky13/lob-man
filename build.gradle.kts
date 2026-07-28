@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.sree"
-version = "1.0.0"
+version = "1.0.1"
 
 tasks.processResources {
     val props = mapOf("version" to version)

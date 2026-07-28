@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class SelectionManager implements Listener {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             this.setFirstCorner(player, event.getClickedBlock().getLocation());
         }
-        else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getHand() == EquipmentSlot.HAND) {
             this.setSecondCorner(player, event.getClickedBlock().getLocation());
         }
 
