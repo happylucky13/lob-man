@@ -41,6 +41,14 @@ public class SafetyNet implements ConfigurationSerializable {
         return tpLocation;
     }
 
+    public String getFirstPosition() {
+        return (minX + ", " + minZ);
+    }
+
+    public String getSecondPosition() {
+        return (maxX + ", " + maxZ);
+    }
+
     // Detect if player is within bounds
     public List<Player> detectPlayer() {
         List<Player> lobbyPlayers = tpLocation.getWorld().getPlayers();

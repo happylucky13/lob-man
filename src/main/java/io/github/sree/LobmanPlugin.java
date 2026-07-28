@@ -8,6 +8,7 @@ import io.github.sree.selection.SelectionManager;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +26,7 @@ public class LobmanPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(selectionManager, this);
 
         // Register lobman command
-        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, safetyNetManager.getActiveSafetyNets(), selectionManager.getActiveSelections());
+        LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, selectionManager);
 
         LiteralCommandNode<CommandSourceStack> lobmanCommand = Commands.literal("lobman")
                 .then(safetyNetCommand.createCommand())
