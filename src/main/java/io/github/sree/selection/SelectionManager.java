@@ -24,12 +24,12 @@ public class SelectionManager implements Listener {
 
     public void setFirstCorner(Player player, Location location) {
         activeSelections.get(player).setFirstCorner(location);
-        player.sendMessage(Component.text("First position set to " + location.getX() + " " + location.getY() + " " + location.getZ(), NamedTextColor.LIGHT_PURPLE));
+        player.sendMessage(Component.text("First position set to (" + formatLocation(location) + ")", NamedTextColor.LIGHT_PURPLE));
     }
 
     public void setSecondCorner(Player player, Location location) {
         activeSelections.get(player).setSecondCorner(location);
-        player.sendMessage(Component.text("Second position set to " + location.getX() + " " + location.getY() + " " + location.getZ(), NamedTextColor.LIGHT_PURPLE));
+        player.sendMessage(Component.text("Second position set to (" + formatLocation(location) + ")", NamedTextColor.LIGHT_PURPLE));
     }
 
     @EventHandler
@@ -61,5 +61,9 @@ public class SelectionManager implements Listener {
     public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         activeSelections.remove(player);
+    }
+
+    public static String formatLocation(Location location) {
+        return ((int) location.getX() + ", " + (int) location.getZ());
     }
 }
