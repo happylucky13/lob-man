@@ -11,12 +11,13 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LobmanPlugin extends JavaPlugin {
 
-    private final List<SafetyNet> activeSafetyNets = new ArrayList<>();
+    private final Map<String, SafetyNet> activeSafetyNets = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -42,7 +43,7 @@ public class LobmanPlugin extends JavaPlugin {
         safetyNetManager.scheduleSafetyNets();
     }
 
-    public List<SafetyNet> getActiveSafetyNets() {
+    public Map<String, SafetyNet> getActiveSafetyNets() {
         return activeSafetyNets;
     }
 }

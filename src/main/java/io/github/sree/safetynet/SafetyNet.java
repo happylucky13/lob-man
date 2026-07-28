@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SafetyNet implements ConfigurationSerializable {
-    private final String name;
     private final int yLevel;
 
     private final int minX;
@@ -21,8 +20,7 @@ public class SafetyNet implements ConfigurationSerializable {
 
     private final Location tpLocation;
 
-    public SafetyNet(String name, int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
-        this.name = name;
+    public SafetyNet(int yLevel, int x1, int x2, int z1, int z2, Location tpLocation) {
         this.yLevel = yLevel;
 
         this.minX = Math.min(x1, x2);

@@ -32,10 +32,10 @@ import java.util.Map;
 public class LobmanSafetyNetCommand {
 
     private final SafetyNetManager safetyNetManager;
-    private final List<SafetyNet> activeSafetyNets;
+    private final Map<String, SafetyNet> activeSafetyNets;
     private final Map<Player, RegionSelection> activeSelections;
 
-    public LobmanSafetyNetCommand(SafetyNetManager safetyNetManager, List<SafetyNet> activeSafetyNets, Map<Player, RegionSelection> activeSelections) {
+    public LobmanSafetyNetCommand(SafetyNetManager safetyNetManager, Map<String, SafetyNet> activeSafetyNets, Map<Player, RegionSelection> activeSelections) {
         this.safetyNetManager = safetyNetManager;
         this.activeSafetyNets = activeSafetyNets;
         this.activeSelections = activeSelections;
