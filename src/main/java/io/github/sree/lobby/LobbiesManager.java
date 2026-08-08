@@ -3,8 +3,6 @@ package io.github.sree.lobby;
 import io.github.sree.LobmanPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,4 +64,6 @@ public class LobbiesManager {
         lobbies.addAll(config.getStringList("lobby-worlds"));
         plugin.getLogger().info("Successfully registered " + lobbies.size() + " lobby-worlds.");
     }
+
+
 }
