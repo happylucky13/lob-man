@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LobbiesManager {
@@ -16,7 +17,7 @@ public class LobbiesManager {
     }
 
     public List<String> getLobbies() {
-        return lobbies;
+        return Collections.unmodifiableList(lobbies);
     }
 
     public void addAndRegisterLobbyWorld(String worldName) {
