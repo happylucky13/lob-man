@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class LobmanLobbyCommand {
 
@@ -39,24 +40,34 @@ public class LobmanLobbyCommand {
 
     private int addLobbyWorld(CommandContext<CommandSourceStack> ctx) {
         String worldName = ctx.getArgument("world_name", String.class);
+        CommandSender sender = ctx.getSource().getSender();
         lobbiesManager.addAndRegisterLobbyWorld(worldName);
+
+        if (lobbiesManager.getLobbies().contains(worldName) && sender instanceof Player) {
+            sender.sendMessage(Component.text("World successfully registered!", NamedTextColor.GOLD));
+        }
 
         return Command.SINGLE_SUCCESS;
     }
 
     private int removeLobbyWorld(CommandContext<CommandSourceStack> ctx) {
         String worldName = ctx.getArgument("world_name", String.class);
+        CommandSender sender = ctx.getSource().getSender();
         lobbiesManager.removeAndUnregisterLobbyWorld(worldName);
+
+        if (!lobbiesManager.getLobbies().contains(worldName) && sender instanceof Player) {
+            sender.sendMessage(Component.text("World successfully unregistered!", NamedTextColor.GOLD));
+        }
 
         return Command.SINGLE_SUCCESS;
     }
 
     private int getLobbyWorlds(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        Component message = Component.text("Current lobby worlds:", NamedTextColor.GOLD).append(Component.newline());
+        Component message = Component.text("Current lobby worlds:", NamedTextColor.GOLD);
 
         for (String lobby : lobbiesManager.getLobbies()) {
-            message = message.append(Component.text(lobby).append(Component.newline()));
+            message = message.append(Component.newline()).append(Component.text(lobby));
         }
 
         sender.sendMessage(message);
