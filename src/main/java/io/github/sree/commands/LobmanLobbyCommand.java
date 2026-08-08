@@ -53,7 +53,7 @@ public class LobmanLobbyCommand {
 
     private int getLobbyWorlds(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        Component message = Component.text("Current lobby worlds:", NamedTextColor.GOLD);
+        Component message = Component.text("Current lobby worlds:", NamedTextColor.GOLD).append(Component.newline());
 
         for (String lobby : lobbiesManager.getLobbies()) {
             message = message.append(Component.text(lobby).append(Component.newline()));

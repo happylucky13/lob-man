@@ -28,6 +28,7 @@ public class LobbiesManager {
         lobbies.add(worldName);
         FileConfiguration config = plugin.getConfig();
         config.set("lobby-worlds", lobbies);
+        plugin.saveConfig();
 
         plugin.getLogger().info("Successfully added " + worldName + " to lobby-worlds.");
     }
@@ -43,6 +44,7 @@ public class LobbiesManager {
         if (lobbies.contains(worldName)) {
             lobbies.remove(worldName);
             config.set("lobby-worlds", lobbies);
+            plugin.saveConfig();
 
             plugin.getLogger().info("Successfully removed " + worldName + " from lobby-worlds.");
             return;
