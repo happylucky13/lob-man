@@ -4,6 +4,9 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.sree.commands.LobmanLobbyCommand;
 import io.github.sree.commands.LobmanSafetyNetCommand;
 import io.github.sree.lobby.LobbiesManager;
+import io.github.sree.lobby.listeners.DamageEventListener;
+import io.github.sree.lobby.listeners.FoodLevelChangeListener;
+import io.github.sree.lobby.listeners.LobbiesListener;
 import io.github.sree.safetynet.SafetyNet;
 import io.github.sree.safetynet.SafetyNetManager;
 import io.github.sree.selection.SelectionManager;
@@ -13,6 +16,8 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 
 public class LobmanPlugin extends JavaPlugin {
@@ -24,6 +29,9 @@ public class LobmanPlugin extends JavaPlugin {
 
         ConfigurationSerialization.registerClass(SafetyNet.class);
         getServer().getPluginManager().registerEvents(selectionManager, this);
+
+        List<LobbiesListener> lobbiesListeners = List.of(new DamageEventListener(lobbiesManager), new FoodLevelChangeListener(lobbiesManager));
+        lobbiesListeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
         // Register lobman command
         LobmanSafetyNetCommand safetyNetCommand = new LobmanSafetyNetCommand(safetyNetManager, selectionManager);
