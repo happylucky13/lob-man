@@ -3,18 +3,19 @@ package io.github.sree.lobby;
 import io.github.sree.LobmanPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LobbiesManager {
     private final LobmanPlugin plugin;
-    private final Set<String> lobbies = new HashSet<>();
+    private final List<String> lobbies = new ArrayList<>();
 
     public LobbiesManager(LobmanPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public Set<String> getLobbies() {
+    public List<String> getLobbies() {
         return lobbies;
     }
 

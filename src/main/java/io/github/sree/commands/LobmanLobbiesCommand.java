@@ -8,21 +8,20 @@ import io.github.sree.lobby.LobbiesManager;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class LobmanLobbyCommand {
+public class LobmanLobbiesCommand {
 
     private final LobbiesManager lobbiesManager;
 
-    public LobmanLobbyCommand(LobbiesManager lobbiesManager) {
+    public LobmanLobbiesCommand(LobbiesManager lobbiesManager) {
         this.lobbiesManager = lobbiesManager;
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> createCommand() {
-        return Commands.literal("lobby")
+        return Commands.literal("lobbies")
                 .then(Commands.literal("add")
                         .then(Commands.argument("world_name", StringArgumentType.word())
                                 .executes(this::addLobbyWorld)
@@ -44,7 +43,10 @@ public class LobmanLobbyCommand {
         lobbiesManager.addAndRegisterLobbyWorld(worldName);
 
         if (lobbiesManager.getLobbies().contains(worldName) && sender instanceof Player) {
-            sender.sendMessage(Component.text("World successfully registered!", NamedTextColor.GOLD));
+            sender.sendMessage(Component.text("World ", NamedTextColor.GOLD)
+                    .append(Component.text(worldName, NamedTextColor.WHITE))
+                    .append(Component.text(" successfully registered!"))
+            );
         }
 
         return Command.SINGLE_SUCCESS;
@@ -56,7 +58,10 @@ public class LobmanLobbyCommand {
         lobbiesManager.removeAndUnregisterLobbyWorld(worldName);
 
         if (!lobbiesManager.getLobbies().contains(worldName) && sender instanceof Player) {
-            sender.sendMessage(Component.text("World successfully unregistered!", NamedTextColor.GOLD));
+            sender.sendMessage(Component.text("World ", NamedTextColor.GOLD)
+                    .append(Component.text(worldName, NamedTextColor.WHITE))
+                    .append(Component.text(" successfully removed!"))
+            );
         }
 
         return Command.SINGLE_SUCCESS;
@@ -67,7 +72,7 @@ public class LobmanLobbyCommand {
         Component message = Component.text("Current lobby worlds:", NamedTextColor.GOLD);
 
         for (String lobby : lobbiesManager.getLobbies()) {
-            message = message.append(Component.newline()).append(Component.text(lobby));
+            message = message.append(Component.newline()).append(Component.text(lobby, NamedTextColor.WHITE));
         }
 
         sender.sendMessage(message);
