@@ -2,6 +2,7 @@ package io.github.sree;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.sree.commands.LobmanSafetyNetCommand;
+import io.github.sree.lobby.LobbiesManager;
 import io.github.sree.safetynet.SafetyNet;
 import io.github.sree.safetynet.SafetyNetManager;
 import io.github.sree.selection.SelectionManager;
@@ -18,6 +19,7 @@ public class LobmanPlugin extends JavaPlugin {
     public void onEnable() {
         SafetyNetManager safetyNetManager = new SafetyNetManager(this);
         SelectionManager selectionManager = new SelectionManager();
+        LobbiesManager lobbiesManager = new LobbiesManager(this);
 
         ConfigurationSerialization.registerClass(SafetyNet.class);
         getServer().getPluginManager().registerEvents(selectionManager, this);
@@ -36,5 +38,6 @@ public class LobmanPlugin extends JavaPlugin {
         // Load safety nets from disk and start scheduler
         safetyNetManager.loadSafetyNetsFromConfig();
         safetyNetManager.scheduleSafetyNets();
+        lobbiesManager.loadLobbyWorldsFromConfig();
     }
 }

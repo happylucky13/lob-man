@@ -5,17 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LobbiesManager {
     private final LobmanPlugin plugin;
-    private final List<String> lobbies = new ArrayList<>();
+    private final Set<String> lobbies = new HashSet<>();
 
     public LobbiesManager(LobmanPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public List<String> getLobbies() {
+    public Set<String> getLobbies() {
         return lobbies;
     }
 
